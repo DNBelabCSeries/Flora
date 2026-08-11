@@ -171,21 +171,6 @@ Mixed-species 模式还会生成 `qc/barnyard_qc/barnyard_summary.tsv`、`barnya
 
 使用默认 light-output 模式时，建议初次投递至少准备压缩 FASTQ 大小 3-5 倍的可写临时空间。开启 full output 或保留中间文件时需要更多空间。首次正式运行期间可使用 `df -h` 和 `df -i` 同时监控磁盘容量与 inode。
 
-## HPC 调度示例
-
-具体资源参数取决于集群配置。下面是申请 32 个 CPU slot 和 256 GB 内存的 Sun Grid Engine 示例：
-
-```bash
-qsub -cwd \
-  -l vf=256G,p=32 \
-  -binding linear:32 \
-  -P PROJECT_NAME \
-  -q QUEUE_NAME \
-  flora_job.sh
-```
-
-在 `flora_job.sh` 中激活运行环境，并以前台方式执行 `./flora` 或 `./flora mixed`。投递脚本内部的 Flora 命令末尾不要添加 `&`。`vf`、`p`、项目、队列和 binding 策略等参数需要根据所在集群调整。
-
 ## 主要输出
 
 ```text

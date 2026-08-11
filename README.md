@@ -171,21 +171,6 @@ Increasing the number of threads can increase peak memory and does not guarantee
 
 As an initial storage estimate, reserve at least 3-5 times the compressed FASTQ size as writable scratch space when using the default light-output mode. Full output and retained intermediates can require substantially more space. Monitor both space and inodes with `df -h` and `df -i` during the first production run.
 
-## HPC scheduler example
-
-The exact resource syntax depends on the cluster. The following Sun Grid Engine example requests 32 CPU slots and 256 GB RAM:
-
-```bash
-qsub -cwd \
-  -l vf=256G,p=32 \
-  -binding linear:32 \
-  -P PROJECT_NAME \
-  -q QUEUE_NAME \
-  flora_job.sh
-```
-
-Inside `flora_job.sh`, activate the runtime environment and run `./flora` or `./flora mixed` in the foreground. Do not append `&` to the Flora command inside a submitted job script. Resource names such as `vf`, `p`, project, queue, and binding policy must be adapted to the local scheduler configuration.
-
 ## Outputs
 
 The output directory contains:

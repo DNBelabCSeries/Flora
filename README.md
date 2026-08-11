@@ -22,11 +22,20 @@ Flora performs:
 The current binary release requires:
 
 - Linux x86_64;
-- a glibc-compatible Linux distribution (the release is built on Ubuntu 22.04/glibc 2.35);
+- glibc 2.35 or newer (the release is built on Ubuntu 22.04/glibc 2.35);
 - Conda, Miniforge, Mambaforge, or Micromamba;
 - Python 3.11, installed by the bundled environment file.
 
 The release is not compatible with macOS, ARM Linux, or Windows.
+
+Check the system architecture and glibc version before downloading:
+
+```bash
+uname -m
+ldd --version | head -n 1
+```
+
+The expected architecture is `x86_64`. Older HPC operating systems, including systems with glibc 2.17, cannot run this binary release.
 
 ## Download
 
@@ -62,12 +71,15 @@ samtools --version
 minimap2 --version
 bedtools --version
 
-./target/release/flora --version
-./target/release/flora glycine --help
-bash run_all.sh -h
+./flora --version
+./flora --help
+./flora mixed --help
+./flora glycine --help
 ```
 
-The bundled Python bytecode requires Python 3.11. Do not replace the environment with Python 3.10, 3.12, 3.13, or 3.14.
+The embedded Python analysis modules require Python 3.11. Do not replace the environment with Python 3.10, 3.12, 3.13, or 3.14.
+
+For reproducible runs, always provide the 10 bp barcode whitelist explicitly with `--barcode-list-10bp /path/to/BC_1536.txt`. Automatic discovery of a whitelist placed next to the executable is not guaranteed in the current release.
 
 ## Prepare a reference
 
@@ -91,19 +103,21 @@ cut -f1,2 genome.fa.fai | sort -V > chrom_sizes.tsv
 
 `paftools.js` is distributed with minimap2.
 
+Chromosome or contig names must match across `genome.fa`, `genes.gtf`, `genes.bed`, and `chrom_sizes.tsv`. For example, do not mix `chr1` with `1` between files. An explicit `--isoform-gtf` can be supplied when the isoform annotation differs from `genes.gtf`; otherwise Flora reuses `genes.gtf`.
+
 ## Analyze raw FASTQ
 
 The integrated Glycine stage runs automatically:
 
 ```bash
-bash run_all.sh \
+./flora \
   --fastq /data/sample.fastq.gz \
   --barcode-list-10bp /data/BC_1536.txt \
   --ref-dir /data/GRCh38_flora \
   --out-dir ./sample_output \
   --sample-id sample \
   --threads 32 \
-  --cluster-threads 8 \
+  --cluster-threads 16 \
   --top1-alpha 0.1 \
   --max-ed 2
 ```
@@ -111,7 +125,7 @@ bash run_all.sh \
 ## Analyze an existing full-length FASTQ
 
 ```bash
-bash run_all.sh \
+./flora \
   --skip-glycine \
   --full-length-fastq /data/sample.full-length-plus-rescued.fq.gz \
   --barcode-list-10bp /data/BC_1536.txt \
@@ -119,7 +133,7 @@ bash run_all.sh \
   --out-dir ./sample_output \
   --sample-id sample \
   --threads 32 \
-  --cluster-threads 8 \
+  --cluster-threads 16 \
   --top1-alpha 0.1 \
   --max-ed 2
 ```
@@ -127,7 +141,7 @@ bash run_all.sh \
 ## Mixed-species analysis
 
 ```bash
-bash run_all_mixed_species.sh \
+./flora mixed \
   --skip-glycine \
   --full-length-fastq /data/mixed.full-length-plus-rescued.fq.gz \
   --barcode-list-10bp /data/BC_1536.txt \
@@ -135,8 +149,12 @@ bash run_all_mixed_species.sh \
   --out-dir ./mixed_output \
   --sample-id mixed_sample \
   --threads 32 \
-  --cluster-threads 8
+  --cluster-threads 16 \
+  --top1-alpha 0.1 \
+  --max-ed 2
 ```
+
+Mixed-species runs additionally generate `qc/barnyard_qc/barnyard_summary.tsv`, `barnyard_per_cell.tsv`, and a Barnyard QC section in the HTML report.
 
 ## Initial resource guidance
 
@@ -151,6 +169,23 @@ Resource use depends on read count, read length, reference size, barcode diversi
 
 Increasing the number of threads can increase peak memory and does not guarantee proportional acceleration. Benchmark a representative sample before reducing scheduler memory requests.
 
+As an initial storage estimate, reserve at least 3-5 times the compressed FASTQ size as writable scratch space when using the default light-output mode. Full output and retained intermediates can require substantially more space. Monitor both space and inodes with `df -h` and `df -i` during the first production run.
+
+## HPC scheduler example
+
+The exact resource syntax depends on the cluster. The following Sun Grid Engine example requests 32 CPU slots and 256 GB RAM:
+
+```bash
+qsub -cwd \
+  -l vf=256G,p=32 \
+  -binding linear:32 \
+  -P PROJECT_NAME \
+  -q QUEUE_NAME \
+  flora_job.sh
+```
+
+Inside `flora_job.sh`, activate the runtime environment and run `./flora` or `./flora mixed` in the foreground. Do not append `&` to the Flora command inside a submitted job script. Resource names such as `vf`, `p`, project, queue, and binding policy must be adapted to the local scheduler configuration.
+
 ## Outputs
 
 The output directory contains:
@@ -163,7 +198,7 @@ qc/          RNA QC, saturation, and report inputs
 logs/        Per-stage logs
 ```
 
-Key outputs include `read_assigned_cell.csv`, `barcode_to_cell.csv`, tagged BAM files, gene and isoform expression matrices, Scanpy UMAP coordinates, and `<sample>.single_cell_report.html`.
+Key outputs include `read_assigned_cell.csv`, `barcode_to_cell.csv`, tagged BAM files, gene and isoform expression matrices, Scanpy UMAP coordinates, and `<sample>.single_cell_report.html`. Mixed-species analysis also reports the per-cell human/mouse UMI classification under `qc/barnyard_qc/`.
 
 ## Support
 

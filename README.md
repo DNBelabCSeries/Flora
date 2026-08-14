@@ -128,11 +128,7 @@ The integrated Glycine stage runs automatically:
   --barcode-list-10bp /data/BC_1536.txt \
   --ref-dir /data/GRCh38_flora \
   --out-dir ./sample_output \
-  --sample-id sample \
-  --threads 32 \
-  --cluster-threads 16 \
-  --top1-alpha 0.1 \
-  --max-ed 2
+  --sample-id sample
 ```
 
 ## Analyze an existing full-length FASTQ
@@ -144,11 +140,7 @@ The integrated Glycine stage runs automatically:
   --barcode-list-10bp /data/BC_1536.txt \
   --ref-dir /data/GRCh38_flora \
   --out-dir ./sample_output \
-  --sample-id sample \
-  --threads 32 \
-  --cluster-threads 16 \
-  --top1-alpha 0.1 \
-  --max-ed 2
+  --sample-id sample
 ```
 
 ## Mixed-species analysis
@@ -160,11 +152,7 @@ The integrated Glycine stage runs automatically:
   --barcode-list-10bp /data/BC_1536.txt \
   --ref-dir /data/merged_reference \
   --out-dir ./mixed_output \
-  --sample-id mixed_sample \
-  --threads 32 \
-  --cluster-threads 16 \
-  --top1-alpha 0.1 \
-  --max-ed 2
+  --sample-id mixed_sample
 ```
 
 Mixed-species runs additionally generate `qc/barnyard_qc/barnyard_summary.tsv`, `barnyard_per_cell.tsv`, and a Barnyard QC section in the HTML report.

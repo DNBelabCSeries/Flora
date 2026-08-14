@@ -128,11 +128,7 @@ cut -f1,2 genome.fa.fai | sort -V > chrom_sizes.tsv
   --barcode-list-10bp /data/BC_1536.txt \
   --ref-dir /data/GRCh38_flora \
   --out-dir ./sample_output \
-  --sample-id sample \
-  --threads 32 \
-  --cluster-threads 16 \
-  --top1-alpha 0.1 \
-  --max-ed 2
+  --sample-id sample
 ```
 
 ## 分析已有全长 FASTQ
@@ -144,11 +140,7 @@ cut -f1,2 genome.fa.fai | sort -V > chrom_sizes.tsv
   --barcode-list-10bp /data/BC_1536.txt \
   --ref-dir /data/GRCh38_flora \
   --out-dir ./sample_output \
-  --sample-id sample \
-  --threads 32 \
-  --cluster-threads 16 \
-  --top1-alpha 0.1 \
-  --max-ed 2
+  --sample-id sample
 ```
 
 ## Mixed-species 分析
@@ -160,11 +152,7 @@ cut -f1,2 genome.fa.fai | sort -V > chrom_sizes.tsv
   --barcode-list-10bp /data/BC_1536.txt \
   --ref-dir /data/merged_reference \
   --out-dir ./mixed_output \
-  --sample-id mixed_sample \
-  --threads 32 \
-  --cluster-threads 16 \
-  --top1-alpha 0.1 \
-  --max-ed 2
+  --sample-id mixed_sample
 ```
 
 Mixed-species 模式还会生成 `qc/barnyard_qc/barnyard_summary.tsv`、`barnyard_per_cell.tsv`，并在 HTML 报告中增加 Barnyard QC 部分。

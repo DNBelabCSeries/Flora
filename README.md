@@ -247,7 +247,7 @@ The integrated Glycine stage runs automatically:
 
 ```bash
 ./flora \
-  --fastq /data/sample.fastq.gz \
+  --fastq-dir /data/sample_fastq_dir \
   --barcode-list-10bp /data/BC_1536.txt \
   --ref-dir /data/GRCh38_flora \
   --out-dir ./sample_output \

@@ -280,10 +280,6 @@ The integrated Glycine stage runs automatically:
 
 Mixed-species runs additionally generate `qc/barnyard_qc/barnyard_summary.tsv`, `barnyard_per_cell.tsv`, and a Barnyard QC section in the HTML report.
 
-## Measured resource usage
-
-A monitored memory-optimized `flora mixed --skip-glycine` run used a 149 GB compressed full-length FASTQ containing 138,615,368 reads. With 32 workflow threads and 16 cluster threads, the process tree completed in approximately 884 minutes (14 h 44 min). The observed peak PSS was 94.964 GiB and the observed peak summed RSS was 94.973 GiB.
-
 ## Outputs
 
 The output directory contains:

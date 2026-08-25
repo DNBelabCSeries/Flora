@@ -271,10 +271,6 @@ cut -f1,2 genome.fa.fai | sort -V > chrom_sizes.tsv
 
 Mixed-species 模式还会生成 `qc/barnyard_qc/barnyard_summary.tsv`、`barnyard_per_cell.tsv`，并在 HTML 报告中增加 Barnyard QC 部分。
 
-## 实测资源消耗
-
-一次受监控的内存优化版 `flora mixed --skip-glycine` 运行使用了 149 GB 的压缩全长 FASTQ，共包含 138,615,368 条 reads。在流程线程为 32、cluster 线程为 16 时，进程树约运行 884 分钟（14 小时 44 分）。实际观测到的 PSS 峰值为 94.964 GiB，RSS 求和峰值为 94.973 GiB。
-
 ## 主要输出
 
 ```text

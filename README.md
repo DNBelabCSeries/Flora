@@ -58,7 +58,7 @@ tar -xzf Flora-<version>-linux-x86_64.tar.gz
 cd Flora-<version>-linux-x86_64
 ```
 
-## Install the runtime environment
+## Install the runtime environment with Conda
 
 ```bash
 export LANG=C.UTF-8
@@ -117,14 +117,14 @@ save or copy both files into the new `flora_singularity_build` directory. The
 current `Flora.def` expects:
 
 ```text
-Flora-0.1.1-linux-x86_64.tar.gz
-Flora-0.1.1-linux-x86_64.tar.gz.sha256
+Flora-0.1.2-linux-x86_64.tar.gz
+Flora-0.1.2-linux-x86_64.tar.gz.sha256
 ```
 
 Verify the archive from inside the build directory:
 
 ```bash
-sha256sum -c Flora-0.1.1-linux-x86_64.tar.gz.sha256
+sha256sum -c Flora-0.1.2-linux-x86_64.tar.gz.sha256
 ```
 
 Do not extract the archive for the SIF build. `Flora.def` copies and extracts it
@@ -175,8 +175,8 @@ The `flora_singularity_build` directory should now contain at least:
 
 ```text
 Flora.def
-Flora-0.1.1-linux-x86_64.tar.gz
-Flora-0.1.1-linux-x86_64.tar.gz.sha256
+Flora-0.1.2-linux-x86_64.tar.gz
+Flora-0.1.2-linux-x86_64.tar.gz.sha256
 Miniforge3-Linux-x86_64.sh
 flora-base-ubuntu22.04.sif
 ```
@@ -189,15 +189,15 @@ actual SIF build inputs.
 ```bash
 env -u LD_LIBRARY_PATH \
 singularity build --fakeroot \
-  Flora-0.1.1-linux-x86_64.sif \
+  Flora-0.1.2-linux-x86_64.sif \
   Flora.def
 
 singularity run --cleanenv \
-  Flora-0.1.1-linux-x86_64.sif \
+  Flora-0.1.2-linux-x86_64.sif \
   --version
 
 singularity run --cleanenv \
-  Flora-0.1.1-linux-x86_64.sif \
+  Flora-0.1.2-linux-x86_64.sif \
   --help
 ```
 
@@ -206,8 +206,8 @@ Bind the directories containing inputs, references, and outputs for a real run:
 ```bash
 singularity run --cleanenv \
   --bind /data:/data \
-  Flora-0.1.1-linux-x86_64.sif \
-  --fastq /data/sample.fastq.gz \
+  Flora-0.1.2-linux-x86_64.sif \
+  --fastq-dir /data/sample_fastq_dir \
   --barcode-list-10bp /data/BC_1536.txt \
   --ref-dir /data/GRCh38_flora \
   --out-dir /data/sample_output \

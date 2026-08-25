@@ -57,7 +57,7 @@ tar -xzf Flora-<version>-linux-x86_64.tar.gz
 cd Flora-<version>-linux-x86_64
 ```
 
-## 安装运行环境
+## Conda安装运行环境
 
 ```bash
 export LANG=C.UTF-8
@@ -112,14 +112,14 @@ cd flora_singularity_build
 `flora_singularity_build` 目录。当前 `Flora.def` 对应：
 
 ```text
-Flora-0.1.1-linux-x86_64.tar.gz
-Flora-0.1.1-linux-x86_64.tar.gz.sha256
+Flora-0.1.2-linux-x86_64.tar.gz
+Flora-0.1.2-linux-x86_64.tar.gz.sha256
 ```
 
 进入构建目录后验证压缩包：
 
 ```bash
-sha256sum -c Flora-0.1.1-linux-x86_64.tar.gz.sha256
+sha256sum -c Flora-0.1.2-linux-x86_64.tar.gz.sha256
 ```
 
 构建 SIF 时不需要解压这个压缩包，`Flora.def` 会自动将其复制并解压到镜像中。
@@ -167,8 +167,8 @@ curl -L --fail --retry 5 --retry-delay 5 \
 
 ```text
 Flora.def
-Flora-0.1.1-linux-x86_64.tar.gz
-Flora-0.1.1-linux-x86_64.tar.gz.sha256
+Flora-0.1.2-linux-x86_64.tar.gz
+Flora-0.1.2-linux-x86_64.tar.gz.sha256
 Miniforge3-Linux-x86_64.sh
 flora-base-ubuntu22.04.sif
 ```
@@ -180,15 +180,15 @@ flora-base-ubuntu22.04.sif
 ```bash
 env -u LD_LIBRARY_PATH \
 singularity build --fakeroot \
-  Flora-0.1.1-linux-x86_64.sif \
+  Flora-0.1.2-linux-x86_64.sif \
   Flora.def
 
 singularity run --cleanenv \
-  Flora-0.1.1-linux-x86_64.sif \
+  Flora-0.1.2-linux-x86_64.sif \
   --version
 
 singularity run --cleanenv \
-  Flora-0.1.1-linux-x86_64.sif \
+  Flora-0.1.2-linux-x86_64.sif \
   --help
 ```
 
@@ -197,8 +197,8 @@ singularity run --cleanenv \
 ```bash
 singularity run --cleanenv \
   --bind /data:/data \
-  Flora-0.1.1-linux-x86_64.sif \
-  --fastq /data/sample.fastq.gz \
+  Flora-0.1.2-linux-x86_64.sif \
+  --fastq-dir /data/sample_fastq_dir \
   --barcode-list-10bp /data/BC_1536.txt \
   --ref-dir /data/GRCh38_flora \
   --out-dir /data/sample_output \
